@@ -1,0 +1,5 @@
+from node:latest
+
+WORKDIR ../node.js
+
+cmd ["node","npm start"]
