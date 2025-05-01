@@ -1,0 +1,23 @@
+db.pedidos.insertOne({
+  cliente_id: "64b3f",
+  entregador_id: "64b3e",
+  nome: "Carlos Mendes",
+  data: "2024-04-01T00:00:00Z",
+  status: "entregue",
+  local: {
+    type: "Point",
+    coordinates: [-46.6333, -23.5505]
+  },
+  produtos: [
+    { nome: "Pizza Calabresa", preco: 35 },
+    { nome: "Coca-Cola 2L", preco: 10 }
+  ]
+})
+{
+    acknowledged: true,
+    insertedId: ObjectId('6812cba513218ec3f8a8aa03')
+  }
+  db.vendas.aggregate([
+    { $match: { status: "pago" } },
+    { $group: { _id: "$produto", total: { $sum: "$valor" } } }
+  ])
