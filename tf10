@@ -21,3 +21,38 @@ db.pedidos.insertOne({
     { $match: { status: "pago" } },
     { $group: { _id: "$produto", total: { $sum: "$valor" } } }
   ])
+db.pedidos.find({
+  nome: "Carlos Mendes",
+  status: "entregue"
+})
+db.pedidos.aggregate([
+  { $unwind: "$produtos" },
+  { $group: {
+      _id: "$produtos.nome",
+      quantidade_vendida: { $sum: 1 }
+  }},
+  { $sort: { quantidade_vendida: -1 } }
+])
+db.pedidos.createIndex({ local: "2dsphere" })
+db.pedidos.find({
+  local: {
+    $near: {
+      $geometry: {
+        type: "Point",
+        coordinates: [-46.634, -23.551]
+      },
+      $maxDistance: 1000
+    }
+  }
+})
+db.pedidos.find({
+  "produtos.nome": "Pizza Calabresa"
+})
+db.pedidos.find(
+  {},
+  {
+    nome: 1,
+    "produtos.nome": 1,
+    _id: 0
+  }
+)
